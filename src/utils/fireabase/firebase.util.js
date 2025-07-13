@@ -6,6 +6,8 @@ import {
   signInWithRedirect,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 import {
@@ -52,7 +54,7 @@ export const createUserDocumentFromAuth = async (
 
   if (!userSnap.exists()) {
     const { displayName, email } = userAuth;
-   
+
     const createdAt = new Date();
 
     try {
@@ -79,4 +81,8 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
 
   return await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const singOutAuthUser = async (auth) => {
+  await signOut(auth);
 };

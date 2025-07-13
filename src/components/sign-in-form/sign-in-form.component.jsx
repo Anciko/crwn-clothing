@@ -2,7 +2,8 @@ import { auth, signInWithGooglePopup, createUserDocumentFromAuth, createAuthUser
 import FormInput from '../form-input/form-input.component';
 import "./sign-in-form.styles.scss";
 import Button from '../button/button.component';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from '../../context/user.context';
 
 
 function SignInForm() {
@@ -13,6 +14,8 @@ function SignInForm() {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password } = formFields;
 
+    const { setCurrentUser } = useContext(UserContext);
+
     const signInWithGoogle = async () => {
         const response = await signInWithGooglePopup();
         const userDocRef = await createUserDocumentFromAuth(response.user);
@@ -20,7 +23,6 @@ function SignInForm() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         setFormFields({ ...formFields, [name]: value })
     }
 
@@ -31,8 +33,8 @@ function SignInForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            let response = await signInAuthUserWithEmailAndPassword(email, password);
-            console.log(response);
+            let { user } = await signInAuthUserWithEmailAndPassword(email, password);
+            setCurrentUser(user); // set global state current user 
             resetFormFields();
         } catch (error) {
             if (error.code === "auth/invalid-credential") {
@@ -67,7 +69,7 @@ function SignInForm() {
                 <div className='buttons-container'>
                     <Button type="submit"> SIGN IN </Button>
 
-                    <Button type="submit"
+                    <Button 
                         buttonType="google"
                         onClick={signInWithGoogle}>
                         GOOGLE SIGN IN

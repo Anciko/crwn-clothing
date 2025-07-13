@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/fireabase/firebase.util';
 import FormInput from '../form-input/form-input.component';
 import "./sign-up-form.styles.scss";
 import Button from '../button/button.component';
+import { UserContext } from '../../context/user.context';
 
 
 function SignUpForm() {
