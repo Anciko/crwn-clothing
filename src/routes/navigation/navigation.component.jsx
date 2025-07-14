@@ -1,12 +1,20 @@
 import { Link, Outlet } from 'react-router-dom'
-import "./navigation.styles.scss";
 import Logo from "../../assets/crown.svg"
+import CartIcon from "../../components/cart-icon/cart-icon.component"
+import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component"
+
 import { useContext } from 'react';
 import { UserContext } from '../../context/user.context';
+import { CartContext } from '../../context/cart.context';
+
 import { auth, singOutAuthUser } from '../../utils/fireabase/firebase.util';
+
+import "./navigation.styles.scss";
+
 
 const Navigation = () => {
     const { currentUser, setCurrentUser } = useContext(UserContext);
+    const { isCartOpen } = useContext(CartContext);
 
     const handleSignOut = async () => {
         await singOutAuthUser(auth);
@@ -33,8 +41,12 @@ const Navigation = () => {
                             </Link>
                         )
                     }
-
+                    <CartIcon />
                 </div>
+                {
+                    isCartOpen && <CartDropdown />
+                }
+
             </div >
             <Outlet />
         </>
